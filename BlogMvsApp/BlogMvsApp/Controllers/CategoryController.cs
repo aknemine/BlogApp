@@ -14,6 +14,11 @@ namespace BlogMvsApp.Controllers
     {
         private BlogContext db = new BlogContext();
 
+        public PartialViewResult CategoryList()
+        {
+            return PartialView(db.Categories.ToList());
+        }
+
         // GET: Category
         public ActionResult Index()
         {
@@ -56,12 +61,13 @@ namespace BlogMvsApp.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,CategoryName")] Category category)
+        public ActionResult Create([Bind(Include = "CategoryName")] Category category)
         {
             if (ModelState.IsValid)
             {
                 db.Categories.Add(category);
                 db.SaveChanges();
+                TempData["Category"] = db;
                 return RedirectToAction("Index");
             }
 
@@ -94,6 +100,7 @@ namespace BlogMvsApp.Controllers
             {
                 db.Entry(category).State = EntityState.Modified;
                 db.SaveChanges();
+                TempData["Category"] = category;
                 return RedirectToAction("Index");
             }
             return View(category);

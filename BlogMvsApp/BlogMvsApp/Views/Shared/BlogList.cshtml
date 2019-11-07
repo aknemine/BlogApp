@@ -1,0 +1,35 @@
+﻿@model IEnumerable<BlogMvsApp.Models.BlogModel>
+
+@if(Model.Count() == 0 )
+{
+    <div class="alert alert-warning">
+        <h3>Not Found Record</h3>
+    </div>
+}
+else
+{
+
+}
+
+
+@foreach (var blog in Model)
+{
+    <div class="blog">
+        <h3 class="page-header">
+            @blog.Header
+        </h3>
+
+        <p>
+            <span class="glyphicon glyphicon-time">
+                @blog.AddingDate
+            </span>
+        </p>
+        <p>
+            <hr />
+            <img class="img-responsive" src="http://placehold.it/900x300" alt="" />
+            <hr />
+        </p>
+        @Html.ActionLink("More...", "Details", "Blog", new { id = @blog.Id }, new { @class = "btn btn-primary" })
+
+    </div>
+}

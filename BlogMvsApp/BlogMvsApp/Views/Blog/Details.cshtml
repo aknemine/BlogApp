@@ -4,79 +4,46 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
 
-<div>
-    <h4>Blog</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Category.CategoryName)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Category.CategoryName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Header)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Header)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Explanation)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Explanation)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Content)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Content)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.AddingDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.AddingDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Confirmation)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Confirmation)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.HomePage)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.HomePage)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Image)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Image)
-        </dd>
-
-    </dl>
-</div>
+<h1>@Model.Header</h1>
+<hr />
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    <span class="glyphicon glyphicon-time"></span>
+    @Model.AddingDate
 </p>
+<hr />
+<img class="img-responsive" src="http://placehold.it/900x300" alt="" />
+<hr />
+<blockquote>
+    <p>@Model.Explanation</p>
+</blockquote>
+<p>
+    @Model.Content
+</p>
+
+
+@section SagKolon
+{
+    <div class="well">
+        <h4>Make a Comment:</h4>
+        <form role="form">
+            <div class="form-group">
+                <textarea class="form-control" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Record</button>
+        </form>
+    </div>
+    <div class="well">
+        <h4>Blog Search</h4>
+        <div class="input-group">
+            <input type="text" class="form-control" />
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+            </span>
+        </div>
+    </div>
+    @{ Html.RenderAction("CategoryList", "Category");};
+}

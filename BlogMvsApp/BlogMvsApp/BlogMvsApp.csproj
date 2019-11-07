@@ -136,6 +136,7 @@
     <Compile Include="Models\Blog.cs" />
     <Compile Include="Models\BlogContext.cs" />
     <Compile Include="Models\BlogInitializer.cs" />
+    <Compile Include="Models\BlogModel.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\CategoryModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -150,6 +151,10 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Category\CategoryList.cshtml" />
+    <Content Include="Views\Blog\List.cshtml" />
+    <Content Include="Views\Shared\BlogList.cshtml" />
+    <Content Include="Views\Shared\Search.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

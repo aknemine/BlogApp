@@ -14,10 +14,37 @@ namespace BlogMvsApp.Controllers
     {
         private BlogContext db = new BlogContext();
 
+        public ActionResult List(int? id,string Keyword )
+        {
+            var blogs = db.Blogs
+                .Where(i => i.Confirmation == true)
+                .Select(i => new BlogModel()
+                {
+                    Id = i.Id,
+                    Header = i.Header.Length > 100 ? i.Header.Substring(0, 100) + "..." : i.Header,
+                    Explanation = i.Explanation,
+                    AddingDate = i.AddingDate,
+                    HomePage = i.HomePage,
+                    Confirmation = i.Confirmation,
+                    Image = i.Image,
+                    CategoryId=i.CategoryId
+                }).AsQueryable();
+            if(string.IsNullOrEmpty("Keyword")==false)
+            {
+                blogs = blogs.Where(i => i.Header.Contains(Keyword) || i.Explanation.Contains(Keyword));
+            }
+
+            if(id!=null)
+            {
+                blogs = blogs.Where(i => i.CategoryId == id);
+            }
+            return View(blogs.ToList());
+        }
+
         // GET: Blog
         public ActionResult Index()
         {
-            var blogs = db.Blogs.Include(b => b.Category);
+            var blogs = db.Blogs.Include(b => b.Category).OrderByDescending(i => i.AddingDate);
             return View(blogs.ToList());
         }
 
@@ -48,10 +75,11 @@ namespace BlogMvsApp.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Header,Explanation,Content,AddingDate,Confirmation,HomePage,Image,CategoryId")] Blog blog)
+        public ActionResult Create([Bind(Include = "Header,Explanation,Content,Image,CategoryId")] Blog blog)
         {
             if (ModelState.IsValid)
             {
+                blog.AddingDate = DateTime.Now;
                 db.Blogs.Add(blog);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -62,7 +90,7 @@ namespace BlogMvsApp.Controllers
         }
 
         // GET: Blog/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int? id)       //nullable int kullanıldı
         {
             if (id == null)
             {
@@ -82,13 +110,25 @@ namespace BlogMvsApp.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Header,Explanation,Content,AddingDate,Confirmation,HomePage,Image,CategoryId")] Blog blog)
+        public ActionResult Edit([Bind(Include = "Id,Header,Explanation,Content,Confirmation,HomePage,Image,CategoryId")] Blog blog)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(blog).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                var entity = db.Blogs.Find(blog.Id);
+                if (entity != null)
+                {
+                    entity.Header = blog.Header;
+                    entity.Explanation = blog.Explanation;
+                    entity.Image = blog.Image;
+                    entity.Content = blog.Content;
+                    entity.Confirmation = blog.Confirmation;
+                    entity.HomePage = blog.HomePage;
+                    entity.CategoryId = blog.CategoryId;
+                    db.SaveChanges();
+                    TempData["Blog"] = entity;      //bilgi taşıma
+                    return RedirectToAction("Index");
+                }
+
             }
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "CategoryName", blog.CategoryId);
             return View(blog);
